@@ -30,3 +30,9 @@ export function createFilterControl(ymaps) {
 
   return listBoxControl;
 }
+
+export function isClusterContainsInActiveStation(stationsArr) {
+  let inActiveStations = stationsArr.filter(
+    station => !station.isActive);
+  return inActiveStations.length;
+}

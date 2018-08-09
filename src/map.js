@@ -1,6 +1,6 @@
 import { loadList, loadDetails } from './api';
 import { getDetailsContentLayout } from './details';
-import { createFilterControl } from './filter';
+import { createFilterControl, isClusterContainsInActiveStation } from './filter';
 
 export default function initMap(ymaps, containerId) {
   const myMap = new ymaps.Map(containerId, {
@@ -21,10 +21,9 @@ export default function initMap(ymaps, containerId) {
 
   myMap.geoObjects.add(objectManager);
 
-  objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
-
   loadList().then(data => {
     objectManager.add(data);
+    initClustersColor(objectManager.clusters);
   });
 
   // details
@@ -52,4 +51,27 @@ export default function initMap(ymaps, containerId) {
       obj => filters[obj.isActive ? 'active' : 'defective']
     );
   });
+
+  function initClustersColor (clustersArr) {
+    clustersArr.each(cluster => {
+      if (isClusterContainsInActiveStation(cluster.features)) {
+        changeClusterColorToGreen(cluster.id);
+      } else {
+        changeClusterColorToRed(cluster.id);
+      }
+    });
+  }
+
+  function changeClusterColorToGreen (objectId) {
+      objectManager.clusters.setClusterOptions(objectId, {
+          preset: 'islands#greenClusterIcons'
+      });
+  }
+
+  function changeClusterColorToRed (objectId) {
+      objectManager.clusters.setClusterOptions(objectId, {
+          preset: 'islands#redClusterIcons'
+      });
+  }
+
 }
