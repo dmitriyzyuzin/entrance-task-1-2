@@ -5,7 +5,6 @@ import { createFilterControl, isClusterContainsInActiveStation } from './filter'
 export default function initMap(ymaps, containerId) {
   const myMap = new ymaps.Map(containerId, {
     center: [55.76, 37.64],
-    controls: [], // TODO: check this parametr later, don't see it in docs
     zoom: 10
   });
 
