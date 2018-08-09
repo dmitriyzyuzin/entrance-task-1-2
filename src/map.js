@@ -52,12 +52,16 @@ export default function initMap(ymaps, containerId) {
     );
   });
 
+  myMap.events.add('boundschange', () => {
+    initClustersColor(objectManager.clusters);
+  })
+
   function initClustersColor (clustersArr) {
     clustersArr.each(cluster => {
       if (isClusterContainsInActiveStation(cluster.features)) {
-        changeClusterColorToGreen(cluster.id);
-      } else {
         changeClusterColorToRed(cluster.id);
+      } else {
+        changeClusterColorToGreen(cluster.id);
       }
     });
   }
